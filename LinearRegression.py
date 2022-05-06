@@ -39,6 +39,7 @@ from sklearn.model_selection import train_test_split
 
 import matplotlib.pyplot as plt
 from matplotlib import style
+import pickle
 
 style.use('ggplot')
 
@@ -100,7 +101,6 @@ df.dropna(inplace=True)
 
 # Labels usually a lowercase y
 y = np.array(df['label'])
-y = np.array(df['label'])
 
 print(len(X), len(y)) # These numbers should be the same
 
@@ -118,6 +118,16 @@ clf = LinearRegression()
 
 # To fit (or train) or train our classifier, fit is synonymous with train
 clf.fit(X_train, y_train)
+
+# This will store the pickle 
+with open('linearregression.pickle', 'wb') as f:
+
+  pickle.dump(clf, f)
+
+# This will load the pickle
+pickle_in = open('linearregression.pickle', 'rb')
+clf = pickle.load(pickle_in)
+
 # Score is synonymous with test
 accuracy = clf.score(X_test, y_test)
 
@@ -162,4 +172,19 @@ plt.show()
 
 
 # Start 6
+
+
+# Pickling is the serialization of any Python object, so this could be a 
+# dictionary or a classifier or any other object
+# Pickle (or save) the classifier after training to avoid having to run through the training process again
+# This is great for very large datasets because this would become very costly
+# You may want to retrain once a month or something like that
+
+
+
+# Start 7 
+
+
+
+# Breakdown Linear Regression
 
