@@ -64,6 +64,7 @@ df = df[['Adj. Open', 'Adj. High', 'Adj. Low', 'Adj. Close', 'Adj. Volume']]
 df['HighLowPercent'] = (df['Adj. High'] - df['Adj. Close']) / df['Adj. Close'] * 100.0
 df['PercentChange'] = (df['Adj. Close'] - df['Adj. Open']) / df['Adj. Open'] * 100.0
 
+#             price             x               x               x
 # Below are our features
 df = df[['Adj. Close', 'HighLowPercent', 'PercentChange', 'Adj. Volume']]
 
@@ -78,7 +79,7 @@ df.fillna(-9999, inplace=True)
 
 # ForecastOut will be the number of days out we're predicting
 # 0.1 will predict out 10% of the dataframe
-ForecastOut = int(math.ceil(0.01*len(df)))
+ForecastOut = int(math.ceil(0.1*len(df)))
 print('Total Days in Dataset: ' + str(len(df)))
 print('ForecastOut: ' + str(ForecastOut))
 
@@ -91,10 +92,10 @@ print(df.tail())  # Shows Last 5 Entries in Data Set
 
 # Features usually uppercase X
 # df.drop is returning a new dataframe and then being converted to a numpy array
-X = np.array(df.drop(['label'], 1))
+X = np.array(df.drop(['label', 'Adj. Close'], 1))
 X = preprocessing.scale(X)
-X = X[:-ForecastOut]
 X_lately = X[-ForecastOut:] # Stuff we're going to predict against
+X = X[:-ForecastOut]
 
 #X = X[:-ForecastOut+1]
 df.dropna(inplace=True)

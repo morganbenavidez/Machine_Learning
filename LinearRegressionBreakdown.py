@@ -26,14 +26,32 @@ from re import M
 
 from statistics import mean
 import numpy as np
+import random
 import matplotlib.pyplot as plt
 from matplotlib import style
 
 style.use('fivethirtyeight')
 
 
-xs = np.array([1,2,3,4,5,6], dtype=np.float64)
-ys = np.array([5,4,6,5,6,7], dtype=np.float64)
+#xs = np.array([1,2,3,4,5,6], dtype=np.float64)
+#ys = np.array([5,4,6,5,6,7], dtype=np.float64)
+
+
+
+def create_dataset(HowMany, variance, step=2, correlation= False):
+
+  val = 1
+  ys = []
+  for i in range(HowMany):
+    y = val + random.randrange(-variance, variance)
+    ys.append(y)
+    if correlation and correlation == 'pos':
+      val += step
+    elif correlation and correlation == 'neg':
+      val -= step
+  xs = [i for i in range(len(ys))]
+
+  return np.array(xs, dtype=np.float64), np.array(ys, dtype=np.float64)
 
 def best_fit_slope_and_yintercept(xs, ys):
 
@@ -55,6 +73,14 @@ def coefficient_of_determination(ys_orig, ys_line):
   squared_error_y_mean = squared_error(ys_orig, y_mean_line)
   return 1 - (squared_error_regr / squared_error_y_mean)
 
+
+
+
+xs, ys = create_dataset(40, 10, 2, correlation='pos')
+print(xs)
+print(ys)
+
+
 m, b = best_fit_slope_and_yintercept(xs, ys)
 
 print(m, b)
@@ -73,7 +99,11 @@ print('r_squared: ' + str(r_squared))
 
 #plt.plot(xs, ys)
 plt.scatter(xs, ys)
-plt.scatter(predict_x, predict_y, color='g')
+
+
+# Run the Prediction Line
+
+#plt.scatter(predict_x, predict_y, color='g')
 plt.plot(xs, regression_line)
 plt.show()
 
@@ -93,3 +123,20 @@ plt.show()
 # r^2 = coefficient of determination, used to determine accuracy 
 # you want r^2 higher, closer to 1
 # r^2 = 1 - ((SE * yHat) / (SE * mean(y)))
+
+
+
+# Start 11
+
+# Built squared_error and coefficient_of_determination functions
+
+
+
+# Start 12
+
+# Built create_dataset function
+# Decreasing Variance should increase Coefficient of Determination
+# Increasing Variance should decrease Coefficient of Determination
+# If Line is almost horizonal (r^2 is extremely small, i.e. .0007)
+# than the data is not linear and should use a different form of machine learning
+# not linear regression
